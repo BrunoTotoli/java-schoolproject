@@ -12,7 +12,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Configuration
@@ -34,7 +33,7 @@ public class SchoolCommandLineRunnerTests implements CommandLineRunner {
     }
 
     public void insertData() {
-        Student student = new Student(null, "Rogerio", null);
+        Student student = new Student(null, "Rogerio", 12, null);
         Course course = new Course(null, "Geografia", null);
         Course course1 = new Course(null, "Ciencias", null);
         Course course2 = new Course(null, "Matematica", null);
@@ -79,17 +78,5 @@ public class SchoolCommandLineRunnerTests implements CommandLineRunner {
         courseRepository.save(course4);
 
 
-        List<CourseRegistration> cours = courseRegistrationRepository.findCourseRegistrationsByStudentId(1L);
-
-        for (CourseRegistration c : cours) {
-            System.out.println(c.getStudent().getId());
-            System.out.println(c.getStudent().getStudentName());
-            System.out.println(c.getCourse().getId());
-            System.out.println(c.getCourse().getCourseName());
-
-            System.out.println(c.getCourse());
-            System.out.println(c.getStudent());
-
-        }
     }
 }

@@ -9,7 +9,6 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @EqualsAndHashCode
 @Getter
 @Setter
@@ -19,9 +18,9 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String studentName;
+    private Integer age;
 
     @JsonIgnore
-    @ToString.Exclude
     @OneToMany(mappedBy = "student")
     Set<CourseRegistration> courses;
 }

@@ -12,9 +12,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Getter
 @Setter
-@ToString
 public class CourseRegistrationID implements Serializable {
-
 
     private Long studentId;
     private Long courseId;

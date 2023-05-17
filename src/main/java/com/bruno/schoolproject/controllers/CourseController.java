@@ -1,6 +1,7 @@
 package com.bruno.schoolproject.controllers;
 
 import com.bruno.schoolproject.entities.Course;
+import com.bruno.schoolproject.requests.course.CourseStudentsDTO;
 import com.bruno.schoolproject.services.CourseService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping(value = "/course")
 public class CourseController {
 
-    private CourseService courseService;
+    private final CourseService courseService;
 
     @GetMapping
     private ResponseEntity<List<Course>> findAll() {
@@ -31,9 +32,14 @@ public class CourseController {
         return new ResponseEntity<>(courseService.save(course), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{studentID}/{courseID}")
-    private ResponseEntity<Course> saveCourse(@PathVariable Long studentID, @PathVariable Long courseID) {
+    @PostMapping("/link")
+    private ResponseEntity<Course> saveCourse(@RequestParam Long studentID, @RequestParam Long courseID) {
         return new ResponseEntity<>(courseService.saveStudentOnExistingCourse(studentID, courseID), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/students")
+    private ResponseEntity<CourseStudentsDTO> findCourseWithStudentsById(@PathVariable Long id){
+        return new ResponseEntity<>(courseService.findCourseWithStudentsById(id),HttpStatus.OK);
     }
 
 }

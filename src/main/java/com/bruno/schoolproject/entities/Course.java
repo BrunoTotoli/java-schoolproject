@@ -1,5 +1,6 @@
 package com.bruno.schoolproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +9,6 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
@@ -21,7 +21,7 @@ public class Course {
     private Long id;
     private String courseName;
 
-    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "course")
     Set<CourseRegistration> students;
 }

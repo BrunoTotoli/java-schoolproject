@@ -1,6 +1,8 @@
 package com.bruno.schoolproject.controllers;
 
 import com.bruno.schoolproject.entities.Student;
+import com.bruno.schoolproject.requests.student.StudentCoursesDTO;
+import com.bruno.schoolproject.requests.student.StudentPostRequestBody;
 import com.bruno.schoolproject.services.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class StudentController {
 
-    private StudentService studentService;
+    private final StudentService studentService;
 
     @GetMapping
     private ResponseEntity<List<Student>> findAll() {
@@ -28,9 +30,12 @@ public class StudentController {
     }
 
     @PostMapping
-    private ResponseEntity<Student> save(@RequestBody Student student) {
-        return new ResponseEntity<>(studentService.save(student), HttpStatus.CREATED);
+    private ResponseEntity<Student> save(@RequestBody StudentPostRequestBody studentPostRequestBody) {
+        return new ResponseEntity<>(studentService.save(studentPostRequestBody), HttpStatus.CREATED);
     }
 
-
+    @GetMapping("/{id}/courses")
+    private ResponseEntity<StudentCoursesDTO> findStudentWithCourses(@PathVariable Long id) {
+        return new ResponseEntity<>(studentService.studentWithCourses(id), HttpStatus.OK);
+    }
 }

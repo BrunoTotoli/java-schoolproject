@@ -7,20 +7,23 @@ import com.bruno.schoolproject.entities.Student;
 import com.bruno.schoolproject.repositories.CourseRegistrationRepository;
 import com.bruno.schoolproject.repositories.CourseRepository;
 import com.bruno.schoolproject.repositories.StudentRepository;
+import com.bruno.schoolproject.requests.course.CourseStudentsDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class CourseService {
 
-    private CourseRepository courseRepository;
-    private StudentRepository studentRepository;
-    private CourseRegistrationRepository courseRegistrationRepository;
+    private final CourseRepository courseRepository;
+    private final StudentRepository studentRepository;
+    private final CourseRegistrationRepository courseRegistrationRepository;
 
     public List<Course> findAll() {
         return courseRepository.findAll();
@@ -35,6 +38,7 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
+    @Transactional
     public Course saveStudentOnExistingCourse(Long studentId, Long courseId) {
 
         Course course = courseRepository.findById(courseId)
@@ -59,4 +63,18 @@ public class CourseService {
     }
 
 
+    public CourseStudentsDTO findCourseWithStudentsById(Long id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course dont exists"));
+
+        List<CourseRegistration> courseRegistration = courseRegistrationRepository.findCourseRegistrationsByCourseId(id);
+
+        List<Student> studentList = courseRegistration.stream()
+                .map(x -> x.getStudent())
+                .collect(Collectors.toList());
+
+        return new CourseStudentsDTO(course.getId(),
+                course.getCourseName(),
+                studentList);
+    }
 }
