@@ -5,12 +5,14 @@ import com.bruno.schoolproject.entities.CourseRegistration;
 import com.bruno.schoolproject.entities.Student;
 import com.bruno.schoolproject.mappers.StudentMapper;
 import com.bruno.schoolproject.repositories.CourseRegistrationRepository;
+import com.bruno.schoolproject.repositories.CourseRepository;
 import com.bruno.schoolproject.repositories.StudentRepository;
 import com.bruno.schoolproject.requests.student.StudentCoursesDTO;
 import com.bruno.schoolproject.requests.student.StudentPostRequestBody;
 import com.bruno.schoolproject.requests.student.StudentPutRequestBody;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
     private final CourseRegistrationRepository courseRegistrationRepository;
 
     public List<Student> findAll() {
@@ -42,7 +45,7 @@ public class StudentService {
     }
 
     public void delete(Long id) {
-        studentRepository.delete(findById(id));
+        studentRepository.deleteById(id);
     }
 
     public StudentCoursesDTO studentWithCourses(Long id) {

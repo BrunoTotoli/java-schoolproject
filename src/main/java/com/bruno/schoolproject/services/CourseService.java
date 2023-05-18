@@ -4,9 +4,12 @@ import com.bruno.schoolproject.entities.Course;
 import com.bruno.schoolproject.entities.CourseRegistration;
 import com.bruno.schoolproject.entities.CourseRegistrationID;
 import com.bruno.schoolproject.entities.Student;
+import com.bruno.schoolproject.mappers.CourseMapper;
 import com.bruno.schoolproject.repositories.CourseRegistrationRepository;
 import com.bruno.schoolproject.repositories.CourseRepository;
 import com.bruno.schoolproject.repositories.StudentRepository;
+import com.bruno.schoolproject.requests.course.CoursePostRequestBody;
+import com.bruno.schoolproject.requests.course.CoursePutRequestBody;
 import com.bruno.schoolproject.requests.course.CourseStudentsDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,8 +37,19 @@ public class CourseService {
                 .orElseThrow(() -> new RuntimeException("Not found"));
     }
 
-    public Course save(Course course) {
-        return courseRepository.save(course);
+    public Course save(CoursePostRequestBody coursePostRequestBody) {
+        return courseRepository.save(CourseMapper.INSTANCE.coursePostRequestBodyToCourse(coursePostRequestBody));
+    }
+
+    public void replace(CoursePutRequestBody coursePutRequestBody) {
+        Course savedCourse = findById(coursePutRequestBody.id());
+        Course course = CourseMapper.INSTANCE.coursePutRequestBodyToCourse(coursePutRequestBody);
+        courseRepository.save(course);
+    }
+
+    public void delete(Long id) {
+        Course courseToDelete = findById(id);
+        courseRepository.delete(courseToDelete);
     }
 
     @Transactional
@@ -47,13 +61,18 @@ public class CourseService {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student dont exists"));
 
-        CourseRegistrationID courseRegistrationID = new CourseRegistrationID(studentId, courseId);
+        CourseRegistrationID courseRegistrationID =
+                new CourseRegistrationID(studentId, courseId);
 
-        CourseRegistration courseRegistration = new CourseRegistration(courseRegistrationID, student, course, LocalDateTime.now());
+        CourseRegistration courseRegistration =
+                new CourseRegistration(courseRegistrationID, student, course, LocalDateTime.now());
 
-        courseRegistrationRepository.save(courseRegistration);
+        courseRegistrationRepository
+                .save(courseRegistration);
 
-        Set<CourseRegistration> ratingsCourse = courseRegistration.getCourse().getStudents();
+        Set<CourseRegistration> ratingsCourse = courseRegistration
+                .getCourse()
+                .getStudents();
 
         ratingsCourse.add(courseRegistration);
 
@@ -67,7 +86,8 @@ public class CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course dont exists"));
 
-        List<CourseRegistration> courseRegistration = courseRegistrationRepository.findCourseRegistrationsByCourseId(id);
+        List<CourseRegistration> courseRegistration = courseRegistrationRepository
+                .findCourseRegistrationsByCourseId(id);
 
         List<Student> studentList = courseRegistration.stream()
                 .map(x -> x.getStudent())

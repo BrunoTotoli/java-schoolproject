@@ -1,6 +1,8 @@
 package com.bruno.schoolproject.controllers;
 
 import com.bruno.schoolproject.entities.Course;
+import com.bruno.schoolproject.requests.course.CoursePostRequestBody;
+import com.bruno.schoolproject.requests.course.CoursePutRequestBody;
 import com.bruno.schoolproject.requests.course.CourseStudentsDTO;
 import com.bruno.schoolproject.services.CourseService;
 import lombok.AllArgsConstructor;
@@ -18,28 +20,41 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping
-    private ResponseEntity<List<Course>> findAll() {
+    public ResponseEntity<List<Course>> findAll() {
         return new ResponseEntity<>(courseService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Course> findById(@PathVariable Long id) {
+    public ResponseEntity<Course> findById(@PathVariable Long id) {
         return new ResponseEntity<>(courseService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    private ResponseEntity<Course> save(@RequestBody Course course) {
-        return new ResponseEntity<>(courseService.save(course), HttpStatus.CREATED);
+    public ResponseEntity<Course> save(@RequestBody CoursePostRequestBody coursePostRequestBody) {
+        return new ResponseEntity<>(courseService.save(coursePostRequestBody), HttpStatus.CREATED);
     }
 
     @PostMapping("/link")
-    private ResponseEntity<Course> saveCourse(@RequestParam Long studentID, @RequestParam Long courseID) {
+    public ResponseEntity<Course> saveStudentOnCourse(@RequestParam Long studentID, @RequestParam Long courseID) {
         return new ResponseEntity<>(courseService.saveStudentOnExistingCourse(studentID, courseID), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/students")
-    private ResponseEntity<CourseStudentsDTO> findCourseWithStudentsById(@PathVariable Long id){
-        return new ResponseEntity<>(courseService.findCourseWithStudentsById(id),HttpStatus.OK);
+    public ResponseEntity<CourseStudentsDTO> findCourseWithStudentsById(@PathVariable Long id) {
+        return new ResponseEntity<>(courseService.findCourseWithStudentsById(id), HttpStatus.OK);
     }
+
+    @PutMapping
+    public ResponseEntity<Void> replace(@RequestBody CoursePutRequestBody coursePutRequestBody) {
+        courseService.replace(coursePutRequestBody);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        courseService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 }

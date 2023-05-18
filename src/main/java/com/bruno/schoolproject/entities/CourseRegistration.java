@@ -2,7 +2,6 @@ package com.bruno.schoolproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @Getter
 @Setter
-
 
 
 public class CourseRegistration {
@@ -34,7 +32,7 @@ public class CourseRegistration {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime registeredAt;
 
 

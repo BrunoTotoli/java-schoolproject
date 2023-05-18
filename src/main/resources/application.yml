@@ -23,6 +23,3 @@ spring:
       path: /h2-console
 
 
-logging:
-  level:
-    root: DEBUG
