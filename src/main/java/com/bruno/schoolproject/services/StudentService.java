@@ -12,7 +12,6 @@ import com.bruno.schoolproject.requests.student.StudentPostRequestBody;
 import com.bruno.schoolproject.requests.student.StudentPutRequestBody;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
