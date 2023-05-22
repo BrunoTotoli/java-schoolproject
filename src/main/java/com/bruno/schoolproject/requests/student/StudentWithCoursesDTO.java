@@ -5,5 +5,5 @@ import com.bruno.schoolproject.entities.Course;
 
 import java.util.List;
 
-public record StudentCoursesDTO(Long id, String studentName, Integer age, List<Course> courseList) {
+public record StudentWithCoursesDTO(Long id, String studentName, Integer age, List<Course> courseList) {
 }

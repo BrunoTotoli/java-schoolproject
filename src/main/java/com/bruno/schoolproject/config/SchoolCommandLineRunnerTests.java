@@ -34,11 +34,11 @@ public class SchoolCommandLineRunnerTests implements CommandLineRunner {
 
     public void insertData() {
         Student student = new Student(null, "Rogerio", 12, null);
-        Course course = new Course(null, "Geografia", null);
-        Course course1 = new Course(null, "Ciencias", null);
-        Course course2 = new Course(null, "Matematica", null);
-        Course course3 = new Course(null, "Portugues", null);
-        Course course4 = new Course(null, "Historia", null);
+        Course course = new Course(null, "Geografia", null, null);
+        Course course1 = new Course(null, "Ciencias", null, null);
+        Course course2 = new Course(null, "Matematica", null, null);
+        Course course3 = new Course(null, "Portugues", null, null);
+        Course course4 = new Course(null, "Historia", null, null);
 
         studentRepository.save(student);
         courseRepository.save(course);

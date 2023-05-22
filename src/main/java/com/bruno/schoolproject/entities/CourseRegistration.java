@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @Getter
 @Setter
-
-
 public class CourseRegistration {
 
     @JsonIgnore

@@ -4,27 +4,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
-public class Course {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
-    private String courseName;
+    private String name;
+    private Integer age;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private Set<CourseRegistration> students;
-
     @OneToOne
-    @JsonIgnore
-    private Teacher teacher;
+    private Course course;
 }

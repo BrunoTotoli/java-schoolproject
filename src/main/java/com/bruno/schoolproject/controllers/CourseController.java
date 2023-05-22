@@ -3,7 +3,7 @@ package com.bruno.schoolproject.controllers;
 import com.bruno.schoolproject.entities.Course;
 import com.bruno.schoolproject.requests.course.CoursePostRequestBody;
 import com.bruno.schoolproject.requests.course.CoursePutRequestBody;
-import com.bruno.schoolproject.requests.course.CourseStudentsDTO;
+import com.bruno.schoolproject.requests.course.CourseWithStudentsDTO;
 import com.bruno.schoolproject.services.CourseService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,7 +40,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}/students")
-    public ResponseEntity<CourseStudentsDTO> findCourseWithStudentsById(@PathVariable Long id) {
+    public ResponseEntity<CourseWithStudentsDTO> findCourseWithStudentsById(@PathVariable Long id) {
         return new ResponseEntity<>(courseService.findCourseWithStudentsById(id), HttpStatus.OK);
     }
 
@@ -54,6 +54,11 @@ public class CourseController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         courseService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/linkteacher")
+    public ResponseEntity<Course> saveTeacherOnExistingCourse(@RequestParam Long teacherId, @RequestParam Long courseId) {
+        return new ResponseEntity<>(courseService.saveTeacherOnExistingCourse(courseId,teacherId ), HttpStatus.OK);
     }
 
 

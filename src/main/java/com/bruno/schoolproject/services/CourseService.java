@@ -1,16 +1,14 @@
 package com.bruno.schoolproject.services;
 
-import com.bruno.schoolproject.entities.Course;
-import com.bruno.schoolproject.entities.CourseRegistration;
-import com.bruno.schoolproject.entities.CourseRegistrationID;
-import com.bruno.schoolproject.entities.Student;
+import com.bruno.schoolproject.entities.*;
 import com.bruno.schoolproject.mappers.CourseMapper;
 import com.bruno.schoolproject.repositories.CourseRegistrationRepository;
 import com.bruno.schoolproject.repositories.CourseRepository;
 import com.bruno.schoolproject.repositories.StudentRepository;
+import com.bruno.schoolproject.repositories.TeacherRepository;
 import com.bruno.schoolproject.requests.course.CoursePostRequestBody;
 import com.bruno.schoolproject.requests.course.CoursePutRequestBody;
-import com.bruno.schoolproject.requests.course.CourseStudentsDTO;
+import com.bruno.schoolproject.requests.course.CourseWithStudentsDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +25,7 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final StudentRepository studentRepository;
     private final CourseRegistrationRepository courseRegistrationRepository;
+    private final TeacherRepository teacherRepository;
 
     public List<Course> findAll() {
         return courseRepository.findAll();
@@ -82,7 +81,7 @@ public class CourseService {
     }
 
 
-    public CourseStudentsDTO findCourseWithStudentsById(Long id) {
+    public CourseWithStudentsDTO findCourseWithStudentsById(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course dont exists"));
 
@@ -93,8 +92,24 @@ public class CourseService {
                 .map(x -> x.getStudent())
                 .collect(Collectors.toList());
 
-        return new CourseStudentsDTO(course.getId(),
+        return new CourseWithStudentsDTO(course.getId(),
                 course.getCourseName(),
+                course.getTeacher(),
                 studentList);
+    }
+
+    @Transactional
+    public Course saveTeacherOnExistingCourse(Long courseId, Long teacherId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course dont exists"));
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new RuntimeException("Teacher dont exists"));
+
+        course.setTeacher(teacher);
+
+        teacher.setCourse(course);
+        teacherRepository.save(teacher);
+
+        return courseRepository.save(course);
     }
 }

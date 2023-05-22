@@ -1,14 +1,13 @@
 package com.bruno.schoolproject.controllers;
 
 import com.bruno.schoolproject.entities.Student;
-import com.bruno.schoolproject.requests.student.StudentCoursesDTO;
+import com.bruno.schoolproject.requests.student.StudentWithCoursesDTO;
 import com.bruno.schoolproject.requests.student.StudentPostRequestBody;
 import com.bruno.schoolproject.requests.student.StudentPutRequestBody;
 import com.bruno.schoolproject.services.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/courses")
-    public ResponseEntity<StudentCoursesDTO> findStudentWithCourses(@PathVariable Long id) {
+    public ResponseEntity<StudentWithCoursesDTO> findStudentWithCourses(@PathVariable Long id) {
         return new ResponseEntity<>(studentService.studentWithCourses(id), HttpStatus.OK);
     }
 
