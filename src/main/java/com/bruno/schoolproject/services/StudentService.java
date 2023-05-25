@@ -6,14 +6,13 @@ import com.bruno.schoolproject.entities.Student;
 import com.bruno.schoolproject.mappers.StudentMapper;
 import com.bruno.schoolproject.repositories.CourseRegistrationRepository;
 import com.bruno.schoolproject.repositories.StudentRepository;
-import com.bruno.schoolproject.requests.student.StudentWithCoursesDTO;
 import com.bruno.schoolproject.requests.student.StudentPostRequestBody;
 import com.bruno.schoolproject.requests.student.StudentPutRequestBody;
+import com.bruno.schoolproject.requests.student.StudentWithCoursesDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -50,15 +49,13 @@ public class StudentService {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student dont exists"));
 
-        List<CourseRegistration> courseRegistrationsByStudentId = courseRegistrationRepository.findCourseRegistrationsByStudentId(id);
-
-        String studentName = student.getStudentName();
-        Integer age = student.getAge();
+        List<CourseRegistration> courseRegistrationsByStudentId = courseRegistrationRepository
+                .findCourseRegistrationsByStudentId(id);
 
         List<Course> courses = courseRegistrationsByStudentId.stream()
-                .map(x -> x.getCourse())
-                .collect(Collectors.toList());
-        return new StudentWithCoursesDTO(id, studentName, age, courses);
+                .map(CourseRegistration::getCourse)
+                .toList();
+        return new StudentWithCoursesDTO(id, student.getStudentName(), student.getAge(), courses);
     }
 
 

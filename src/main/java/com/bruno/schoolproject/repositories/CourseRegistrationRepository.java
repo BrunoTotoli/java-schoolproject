@@ -12,4 +12,6 @@ public interface CourseRegistrationRepository extends JpaRepository<CourseRegist
 
     List<CourseRegistration> findCourseRegistrationsByCourseId(Long id);
 
+    boolean existsCourseRegistrationsByStudentIdAndCourseId(Long studentId, Long courseId);
+
 }

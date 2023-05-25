@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -60,23 +59,24 @@ public class CourseService {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student dont exists"));
 
+        if (courseRegistrationRepository.existsCourseRegistrationsByStudentIdAndCourseId(student.getId(), course.getId())) {
+            throw new IllegalStateException("This student has linked to course");
+        }
+
         CourseRegistrationID courseRegistrationID =
                 new CourseRegistrationID(studentId, courseId);
 
         CourseRegistration courseRegistration =
                 new CourseRegistration(courseRegistrationID, student, course, LocalDateTime.now());
 
-        courseRegistrationRepository
-                .save(courseRegistration);
+        CourseRegistration savedCourseRegistration =
+                courseRegistrationRepository.save(courseRegistration);
 
-        Set<CourseRegistration> ratingsCourse = courseRegistration
+        Set<CourseRegistration> courseStudents = savedCourseRegistration
                 .getCourse()
                 .getStudents();
 
-        ratingsCourse.add(courseRegistration);
-
-        course.setStudents(ratingsCourse);
-
+        course.setStudents(courseStudents);
         return courseRepository.save(course);
     }
 
@@ -89,8 +89,8 @@ public class CourseService {
                 .findCourseRegistrationsByCourseId(id);
 
         List<Student> studentList = courseRegistration.stream()
-                .map(x -> x.getStudent())
-                .collect(Collectors.toList());
+                .map(CourseRegistration::getStudent)
+                .toList();
 
         return new CourseWithStudentsDTO(course.getId(),
                 course.getCourseName(),

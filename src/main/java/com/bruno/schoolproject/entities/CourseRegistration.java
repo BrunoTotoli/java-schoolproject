@@ -33,5 +33,4 @@ public class CourseRegistration {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime registeredAt;
 
-
 }
