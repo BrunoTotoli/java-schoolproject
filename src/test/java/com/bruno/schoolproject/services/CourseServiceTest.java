@@ -171,7 +171,7 @@ class CourseServiceTest {
     @Test
     void save_PersistsCourse_WhenSuccessful() {
         CoursePostRequestBody courseToBeSaved =
-                CoursePostRequestBodyCreator.createCoursePostRequestBody();
+               CourseCreator.createCoursePostRequestBodyToBeSaved();
 
         Course savedCourse = courseServiceMock.save(courseToBeSaved);
 
@@ -191,7 +191,7 @@ class CourseServiceTest {
 
     @Test
     void save_UpdateCourse_WhenSuccessful() {
-        Assertions.assertThatCode(() -> courseServiceMock.replace(CoursePutRequestBodyCreator.createCoursePutRequestBody()))
+        Assertions.assertThatCode(() -> courseServiceMock.replace(CourseCreator.createCoursePutRequestBody()))
                 .doesNotThrowAnyException();
 
     }

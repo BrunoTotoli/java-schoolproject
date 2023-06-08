@@ -10,7 +10,7 @@ public class CourseRegistrationCreator {
 
     public static List<CourseRegistration> courseRegistrationList() {
         return List.of(new CourseRegistration(new CourseRegistrationID(1L, 1L)
-                ,StudentCreator.createValidStudent(),
+                , StudentCreator.createValidStudent(),
                 CourseCreator.createValidCourse(),
                 LocalDateTime.now()));
     }

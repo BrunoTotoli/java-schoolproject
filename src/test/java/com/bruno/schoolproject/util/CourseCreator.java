@@ -3,6 +3,8 @@ package com.bruno.schoolproject.util;
 import com.bruno.schoolproject.entities.Course;
 import com.bruno.schoolproject.entities.CourseRegistration;
 import com.bruno.schoolproject.entities.CourseRegistrationID;
+import com.bruno.schoolproject.requests.course.CoursePostRequestBody;
+import com.bruno.schoolproject.requests.course.CoursePutRequestBody;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -41,6 +43,14 @@ public class CourseCreator {
                 .teacher(TeacherCreator.createValidTeacher())
                 .build();
 
+    }
+
+    public static CoursePostRequestBody createCoursePostRequestBodyToBeSaved() {
+        return new CoursePostRequestBody("History");
+    }
+
+    public static CoursePutRequestBody createCoursePutRequestBody() {
+        return new CoursePutRequestBody(1L, "History");
     }
 
 }
